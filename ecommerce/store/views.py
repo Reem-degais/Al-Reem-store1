@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product
 from category.models import Category
+from django.http import HttpResponse
+from django.db.models import Q
 # Create your views here.
 
 def store(request, category_slug=None):
@@ -29,3 +31,15 @@ def product_detail(request, category_slug, product_slug):
         'one_product': one_product,
     }
     return render(request, 'product-detail.html', context)
+
+def search(request):
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        if keyword:
+            products = Product.objects.filter(Q(product_name__icontains=keyword) | Q(description__icontains=keyword))
+    
+    context = {
+        'products': products,
+    }
+    
+    return render(request, 'store.html', context)
