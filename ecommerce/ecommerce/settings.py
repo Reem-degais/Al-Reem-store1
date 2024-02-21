@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cart.apps.CartConfig',
     'store.apps.StoreConfig',
     'accounts.apps.AccountsConfig',
     'category.apps.CategoryConfig',
@@ -67,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'category.context_processors.menu_links',
+                'cart.context_processors.count',
             ],
         },
     },
