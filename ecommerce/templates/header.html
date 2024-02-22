@@ -10,6 +10,9 @@
                 <div class="left-top-bar">
                     Free shipping for standard order over $100
                 </div>
+                
+                {% if user.id is None%}
+                
 
                 <div class="right-top-bar flex-w h-full">
 
@@ -21,6 +24,23 @@
                         register
                     </a>
                 </div>
+
+                {%else%}
+                <div class="right-top-bar">
+                    welcome {{user.first_name}}
+                </div>
+                <div class="right-top-bar flex-w h-full">
+
+                    <a href="#" class="flex-c-m trans-04 p-lr-25">
+                        dashboard
+                    </a>
+
+                    <a href="{% url 'logout' %}" class="flex-c-m trans-04 p-lr-25">
+                        logout
+                    </a>
+                </div>
+
+                {%endif%}
             </div>
         </div>
 
@@ -162,7 +182,7 @@
 
         <ul class="main-menu-m">
             <li>
-                <a href="index.html">Home</a>
+                <a href="">Home</a>
                 <ul class="sub-menu-m">
                     <li><a href="index.html">Homepage 1</a></li>
                     <li><a href="home-02.html">Homepage 2</a></li>
