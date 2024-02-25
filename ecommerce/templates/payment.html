@@ -103,7 +103,6 @@
 						</dl>
 						<hr>
 						<p class="text-center mb-3">
-							<img src="{% static './images/misc/payments.png' %}" height="26">
 						</p>
 
 
@@ -143,7 +142,7 @@
     return cookieValue;
 }
 
-	var amount = "{{ grand_total }}"
+	var amount = "{{ subtotal }}"
 	var url = "{% url 'payment' %}"
 	var csrftoken = getCookie('csrftoken');
 	var orderID = "{{order.order_number}}"

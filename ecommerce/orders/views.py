@@ -2,13 +2,27 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cart.models import CartItem
 from .forms import OrderForm
-from .models import Order
+from .models import Order, Payment
 import datetime
+import json
 # Create your views here.
 
 
 def payment(request):
-     return render(request, 'payment.html')
+    body = json.loads(request.body)
+    order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID']) 
+    payment = Payment(
+        user = request.user,
+        payment_id = body['transID'],
+        payment_method = body['payment_method'],
+        amount_paid = order.order_total,
+        status = body['status'],
+    )
+    payment.save()
+    order.payment = payment
+    order.is_ordered = True
+    order.save()
+    return render(request, 'payment.html')
 
 def place_order(request, subtotal=0, quantity=0):
     current_user = request.user
@@ -19,8 +33,8 @@ def place_order(request, subtotal=0, quantity=0):
     
     subtotal = 0
     for cart_item in cart_items:
-            subtotal += (cart_item.product.price * cart_item.quantity)
-            quantity += cart_item.quantity
+        subtotal += (cart_item.product.price * cart_item.quantity)
+        quantity += cart_item.quantity
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -52,9 +66,9 @@ def place_order(request, subtotal=0, quantity=0):
 
             order= Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
-                 'order': order,
-                 'cart_items': cart_items,
-                 'subtotal': subtotal,
+                'order': order,
+                'cart_items': cart_items,
+                'subtotal': subtotal,
 
             }
             return render(request, 'payment.html', context)
