@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import JsonResponse
 from cart.models import CartItem
 from .forms import OrderForm
-from .models import Order, Payment
+from .models import Order, Payment, OrderProducts
+from store.models import Product
 import datetime
 import json
 # Create your views here.
@@ -22,7 +23,34 @@ def payment(request):
     order.payment = payment
     order.is_ordered = True
     order.save()
-    return render(request, 'payment.html')
+
+    # move the cart items to the product order table
+    cart_items = CartItem.objects.filter(user=request.user)
+    for item in cart_items:
+        orderproduct= OrderProducts()
+        orderproduct.order_id = order.is_ordered
+        orderproduct.quantity = item.quantity
+        orderproduct.is_ordered = True
+        orderproduct.payment = payment
+        orderproduct.user_id = request.user.id
+        orderproduct.product_id = item.product_id
+        orderproduct.product_price = item.product.price
+        orderproduct.save()
+
+        #reduce the quantity of sold products
+        product = Product.objects.get(id=item.product_id)
+        product.stock -= item.quantity
+        product.save()
+    
+    CartItem.objects.filter(user=request.user).delete()
+
+    #send data back to senddata method 
+    data = {
+        'order_number': order.order_number,
+        'transID': payment.payment_id,
+    }
+    return JsonResponse(data)
+
 
 def place_order(request, subtotal=0, quantity=0):
     current_user = request.user
@@ -74,3 +102,7 @@ def place_order(request, subtotal=0, quantity=0):
             return render(request, 'payment.html', context)
     else:
         return redirect('checkout')
+    
+
+def order_successful(request):
+    return render(request, 'order_successful.html')

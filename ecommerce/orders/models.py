@@ -49,7 +49,6 @@ class Order(models.Model):
 
 
 class OrderProducts(models.Model):
-    size = models.CharField(max_length=100)
     quantity = models.IntegerField()
     product_price = models.FloatField()
     is_ordered = models.BooleanField(default=False)
