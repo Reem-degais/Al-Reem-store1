@@ -1,16 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-# Create your models here.
+
 #superuser models
 class MyAccountManager(BaseUserManager):
     # create a user
     def create_user(self, first_name, last_name, username, email, password=None):
         if not email:
             raise ValueError('user must have an email address')
-
-        if not username:
-            raise ValueError('user must have a username')
 
         user = self.model(
             email = self.normalize_email(email),
@@ -45,7 +42,7 @@ class MyAccountManager(BaseUserManager):
 class Account(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50, unique=True)
+    username = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=50)
 
@@ -57,7 +54,7 @@ class Account(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     objects = MyAccountManager()
 

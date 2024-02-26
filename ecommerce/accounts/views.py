@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from cart.views import _cart_id
 from cart.models import Cart, CartItem
 import requests
-
+from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -14,8 +14,8 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
-# Create your views here.
 
+#registration of new user 
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -30,18 +30,26 @@ def register(request):
             user.phone_number = phone_number
             user.save()
 
-            currunt_site = get_current_site(request)
+            #Activate user account  
+            current_site = get_current_site(request)
             mail_subject = 'Activaite your account'
             message = render_to_string('verification_email.html', {
                 'user': user,
-                'domain': currunt_site,
+                'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user),
             })
+            email_address = email
+            send_email = EmailMessage(mail_subject, message, to=[email_address])
+            send_email.send()
 
-           # email_address = email
-            #send_email = EmailMessage(mail_subject, message, to=[email_address])
-            #send_email.send()
+           # messages.success(request, 'Registration seccessful.')
+            return redirect('/accounts/login/?command=verification&email='+email)
+        
+           
+
+        
+            
     else:
         form = RegistrationForm()
     
@@ -70,6 +78,7 @@ def login(request):
             except:
                 pass
             auth.login(request, user)
+            messages.success(request, 'Login successful')
             url = request.META.get('HTTP_REFERER')
             try:
                 query = requests.utils.urlparse(url).query
@@ -92,7 +101,20 @@ def logout(request):
     return redirect('home')
 
 def activate(request, uidb64, token):
-    return
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except(ValueError, TypeError, Account.DoesNotExist):
+        user = None
+    
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, 'your account is activated')
+        return redirect('login')
+    else:
+        messages.error(request, 'Invalid activation link')
+        return redirect('register')
 
 
 @login_required(login_url= 'login')
