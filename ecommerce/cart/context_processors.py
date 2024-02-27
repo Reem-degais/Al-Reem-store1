@@ -2,7 +2,7 @@ from .models import Cart, CartItem
 from .views import _cart_id
 from django.core.exceptions import ObjectDoesNotExist
 
-#count cart items and show it on cart icon on navbar
+#count cart items and show it on cart icon on header
 
 def count(request):
     cart_counter = 0

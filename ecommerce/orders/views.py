@@ -10,6 +10,7 @@ import json
 
 
 def payment(request):
+    #store payment details inside payment method
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID']) 
     payment = Payment(
@@ -28,13 +29,18 @@ def payment(request):
     cart_items = CartItem.objects.filter(user=request.user)
     for item in cart_items:
         orderproduct= OrderProducts()
-        orderproduct.order_id = order.is_ordered
+        orderproduct.order_id = order.id
         orderproduct.quantity = item.quantity
         orderproduct.is_ordered = True
         orderproduct.payment = payment
         orderproduct.user_id = request.user.id
         orderproduct.product_id = item.product_id
         orderproduct.product_price = item.product.price
+        orderproduct.save()
+        cart_item = CartItem.objects.get(id=item.id)
+        product_variation = cart_item.variations.all()
+        orderproduct = OrderProducts.objects.get(id=orderproduct.id)
+        orderproduct.variations.set(product_variation)
         orderproduct.save()
 
         #reduce the quantity of sold products
@@ -43,6 +49,10 @@ def payment(request):
         product.save()
     
     CartItem.objects.filter(user=request.user).delete()
+
+    # Send order recieved email to customer
+   
+
 
     #send data back to senddata method 
     data = {
