@@ -6,6 +6,8 @@ from .models import Order, Payment, OrderProducts
 from store.models import Product
 import datetime
 import json
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 # Create your views here.
 
 
@@ -51,7 +53,14 @@ def payment(request):
     CartItem.objects.filter(user=request.user).delete()
 
     # Send order recieved email to customer
-   
+    mail_subject = 'Thank you for your order!'
+    message = render_to_string('order_successful_email.html', {
+        'user': request.user,
+        'order': order,
+    })
+    email_address = request.user.email
+    send_email = EmailMessage(mail_subject, message, to=[email_address])
+    send_email.send()
 
 
     #send data back to senddata method 
@@ -115,4 +124,27 @@ def place_order(request, subtotal=0, quantity=0):
     
 
 def order_successful(request):
-    return render(request, 'order_successful.html')
+    order_number = request.GET.get('order_number')
+    transID = request.GET.get('payment_id')
+
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_products = OrderProducts.objects.filter(order_id=order.id)
+
+        subtotal = 0
+        for item in ordered_products:
+            subtotal += item.product_price * item.quantity
+
+        payment = Payment.objects.get(payment_id=transID)
+
+        context = {
+            'order': order,
+            'ordered_products': ordered_products,
+            'order_number': order.order_number,
+            'transID': payment.payment_id,
+            'payment': payment,
+            'subtotal': subtotal,
+        }
+        return render(request, 'order_successful.html', context)
+    except (Payment.DoesNotExist, Order.DoesNotExist):
+        return redirect('home')
