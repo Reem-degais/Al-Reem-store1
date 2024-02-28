@@ -4,8 +4,8 @@
 {% block content %}
 
 
-<section class="section-content padding-y bg">
-<div class="container">
+<section class="section-content padding-y bg" style="padding-top: 5%;">
+<div class="container" style="padding-bottom: 5%; padding-top: 5%;">
 
 <!-- ============================ COMPONENT 1 ================================= -->
 
@@ -72,14 +72,14 @@
 	</aside> <!-- col.// -->
 	<aside class="col-lg-6">
 
-		<div class="card">
+		<div class="">
 		<div class="card-body">
       <table class="table table-borderless table-shopping-cart">
       <thead class="text-muted">
       <tr class="small text-uppercase">
-        <th scope="col">Product</th>
-        <th scope="col" width="120">Quantity</th>
-        <th scope="col" width="120">Price</th>
+        <th scope="col" >Product</th>
+        <th scope="col" >Quantity</th>
+        <th scope="col" >Price</th>
 
       </tr>
       </thead>
@@ -89,7 +89,7 @@
       <tr>
       	<td>
       		<figure class="itemside align-items-center">
-      			<div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
+      			<div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm" style="height: 90px; width: 90px;"></div>
       			<figcaption class="info">
       				<a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
       				<p class="text-muted small">
@@ -119,8 +119,8 @@
       </tbody>
       </table>
 
-      <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
-			<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+      <button type="submit" name="submit" class="stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">Place Order</button>
+			<p class="text-center mt-4"><a href="{% url 'store' %}" class="">Continue Shopping</a></p>
       </form>
 		</div> <!-- card-body.// -->
 		</div> <!-- card.// -->
