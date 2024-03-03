@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+(%load static%)
+
+{% block content %}
+
+<section class="section-conten padding-y bg">
+
+
+    <div class="container" style="padding-top: 7%; padding-bottom: 5%;">
+        <div class="row">
+        {%include 'side_bar.html'%}
+        <main class="col-md-9">
+            <article class="card">
+            <header class="card-header">
+                <strong class="d-inline-block ">Orders history</strong>
+                
+            </header>
+            <div class="card-body">
+                <div class="row">
+                    <table class="table">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th scope="col"></th>
+                            
+                            <th scope="col">Order number</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                            {% for order in orders%}
+                            <tr>
+                            <th scope="row"></th>
+                            <td><a href="{%url 'my_order_details' order.order_number%}">{{order.order_number}}</a></td>
+                            <td>${{order.order_total}}</td>
+                            <td>{{order.created_at}}</td>
+                            </tr>
+                            {%endfor%}
+                          
+                        </tbody>
+                      </table>
+                    
+                </div>
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+            <div class="table-responsive">
+            
+            </div> <!-- table-responsive .end// -->
+            </article> <!-- order-group.// -->
+        </main>
+    </div> <!-- row.// -->
+    
+    
+    
+    </section>
+{% endblock %}

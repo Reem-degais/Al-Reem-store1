@@ -1,0 +1,11 @@
+<aside class="col-md-3">
+    <!--   SIDEBAR   -->
+    <ul class="list-group">
+        <a class="list-group-item " href="{% url 'dashboard'%}" style="color: black;"> Dashboard</a>
+        <a class="list-group-item " href="{% url 'my_orders'%}" style="color: black;"> My orders </a>
+        <a class="list-group-item" href="{% url 'changepassword'%}" style="color: black;"> Change my password </a>	
+    </ul>
+    <br>
+    <a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
+    <!--   SIDEBAR .//END   -->
+</aside>

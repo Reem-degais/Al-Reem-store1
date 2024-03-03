@@ -6,19 +6,9 @@
 <section class="section-conten padding-y bg">
 
 
-<div class="container">
+<div class="container" style="padding-top: 7%; padding-bottom: 5%;">
 	<div class="row">
-	<aside class="col-md-3">
-		<!--   SIDEBAR   -->
-		<ul class="list-group">
-			<a class="list-group-item active" href="#"> Dashboard</a>
-			<a class="list-group-item" href="#"> My orders </a>
-			<a class="list-group-item" href=""> Change my password </a>	
-		</ul>
-		<br>
-		<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
-		<!--   SIDEBAR .//END   -->
-	</aside>
+	{%include 'side_bar.html'%}
 	<main class="col-md-9">
 		<article class="card">
 		<header class="card-header">
@@ -36,17 +26,6 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="col-md-6">
-					<div class="card">
-						<div class="card-body">
-					       Email: {{user.email}} <br>
-			    	        Phone: {{user.phone_number}}<br>
-						</div>
-					</div>
-				</div>
-				
-					
 			</div>
 			</div> <!-- row.// -->
 		</div> <!-- card-body .// -->
@@ -56,7 +35,7 @@
 		</article> <!-- order-group.// -->
 	</main>
 </div> <!-- row.// -->
-</div>
+
 
 
 </section>

@@ -13,6 +13,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from orders.models import Order, OrderProducts
 
 
 #registration of new user 
@@ -181,4 +182,51 @@ def resetPassword(request):
             return redirect('resetPassword')
     else:
         return render(request, 'resetPassword.html')
+    
+@login_required(login_url= 'login')
+def my_order(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    counter =1
+    context = {
+        'orders': orders,
+        'counter': counter,
+    }
+    return render(request, 'my_orders.html', context)
+
+@login_required(login_url= 'login')
+def my_order_details(request, order_id):
+    order_details = OrderProducts.objects.filter(order__order_number=order_id )
+    order = Order.objects.get(order_number=order_id)
+    total = 0
+    for item in order_details:
+        total += item.product_price * item.quantity
+    context = {
+        'order_details': order_details,
+        'order': order,
+        'total': total,
+    }
+    return render (request, 'my_order_details.html', context)
+
+def changepassword(request):
+    if request.method == 'POST':
+        user = Account.objects.get(username__iexact=request.user.username)
+        current_password = request.POST['current_password']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        checkPassword = user.check_password(current_password)
+        
+        if password == confirm_password:
+            if checkPassword:
+                user.set_password(password)
+                user.save()
+                messages.success(request, 'Password changed successfully')
+                return redirect('changepassword')
+            else:
+                messages.error(request, 'enter valid password!')
+                return redirect('changepassword') 
+        else:
+            messages.error(request, 'Password do not match!')
+            return redirect('changepassword')
+    else:
+         return render(request, 'changepassword.html')
     
