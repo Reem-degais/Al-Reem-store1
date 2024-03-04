@@ -92,7 +92,7 @@ def add_cart(request, product_id):
                 cart_item.variations.clear()
                 cart_item.variations.add(*product_variation)
             cart_item.save()
-        
+        messages.success(request, 'added to cart')
         return redirect('cart')
     
     # If the user is not authenticated
@@ -157,7 +157,7 @@ def add_cart(request, product_id):
                 cart_item.variations.clear()
                 cart_item.variations.add(*product_variation)
             cart_item.save()
-       
+        messages.success(request, 'added to cart')
         return redirect('cart')
 
 def cart(request, subtotal=0, quantity=0, cart_items=None):
