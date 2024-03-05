@@ -4,7 +4,7 @@ In this project, the Django framework was used to build an e-commerce. It provid
 Before the payment process,  review the order, confirm the address, and then pay using PayPal
 
 ## Demo
-[al-reem store demo]((https://youtu.be/DDZOK3rm1LI?si=1Ju1QXaclR_qfkUK))
+[al-reem store demo](https://youtu.be/DDZOK3rm1LI?si=1Ju1QXaclR_qfkUK)
 
 ## setup
 First thing to do is to clone the repository
