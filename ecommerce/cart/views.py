@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from store.models import Product, Variation
 from .models import Cart, CartItem
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+
 
 # Create your views here.
 
@@ -92,7 +92,6 @@ def add_cart(request, product_id):
                 cart_item.variations.clear()
                 cart_item.variations.add(*product_variation)
             cart_item.save()
-        messages.success(request, 'added to cart')
         return redirect('cart')
     
     # If the user is not authenticated
@@ -157,7 +156,6 @@ def add_cart(request, product_id):
                 cart_item.variations.clear()
                 cart_item.variations.add(*product_variation)
             cart_item.save()
-        messages.success(request, 'added to cart')
         return redirect('cart')
 
 def cart(request, subtotal=0, quantity=0, cart_items=None):

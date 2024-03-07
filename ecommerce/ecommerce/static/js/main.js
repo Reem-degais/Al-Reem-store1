@@ -277,4 +277,10 @@
         $('.js-modal1').removeClass('show-modal1');
     });
 
+
+
 })(jQuery);
+
+setTimeout(function(){
+    $('#message').fadeOut('slow')
+  }, 4000)

@@ -79,7 +79,6 @@ def login(request):
             except:
                 pass
             auth.login(request, user)
-            messages.success(request, 'Login successful')
             url = request.META.get('HTTP_REFERER')
             try:
                 query = requests.utils.urlparse(url).query
@@ -99,7 +98,7 @@ def login(request):
 def logout(request):
     auth.logout(request)
     messages.success(request, 'you logged out')
-    return redirect('home')
+    return redirect('login')
 
 def activate(request, uidb64, token):
     try:
