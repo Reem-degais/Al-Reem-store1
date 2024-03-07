@@ -71,7 +71,7 @@
 										{% if one_product.stock == 0%}
 										<h5 class="text-danger">out of stock</h5>
 										{% else%}
-										<button type="submit" href="" class="stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"><span class="text">add to cart</span><i class="zmdi zmdi-shopping-cart"></i>
+										<button type="submit" href="{% url 'add_cart' one_product.id%}" class="stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"><span class="text">add to cart</span><i class="zmdi zmdi-shopping-cart"></i>
 
 										</button>
 										{% endif %}
